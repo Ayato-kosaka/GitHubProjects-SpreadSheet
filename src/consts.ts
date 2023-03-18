@@ -12,5 +12,12 @@ namespace consts {
   }
   export const INPUT = createObjectFromSpreadsheet("INPUT");
   export const fieldIdList = consts.INPUT["fieldIdList"].split(",");
-  export const getWORK = () => createObjectFromSpreadsheet("WORK");
+  export const getWORK = () => {
+    const { projectId, fields } = createObjectFromSpreadsheet("WORK");
+
+    return {
+      projectId,
+      fields: JSON.parse(fields) as types.Filed[],
+    };
+  };
 }

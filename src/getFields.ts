@@ -9,20 +9,24 @@ namespace getFields {
               ... on ProjectV2Field {
                 id
                 name
+                dataType
               }
               ... on ProjectV2IterationField {
                 id
                 name
+                dataType
                 configuration {
                   iterations {
-                    startDate
                     id
+                    title
+                    startDate
                   }
                 }
               }
               ... on ProjectV2SingleSelectField {
                 id
                 name
+                dataType
                 options {
                   id
                   name
@@ -39,21 +43,7 @@ namespace getFields {
       data: {
         node: {
           fields: {
-            nodes: {
-              id: string;
-              name: string;
-              options?: {
-                id: string;
-                name: string;
-              }[];
-              configuration?: {
-                iterations: {
-                  // 'YYY-MM-DD'
-                  startDate: string;
-                  id: string;
-                }[];
-              };
-            }[];
+            nodes: types.Filed[];
           };
         };
       };

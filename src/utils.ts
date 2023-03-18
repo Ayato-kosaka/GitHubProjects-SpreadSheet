@@ -2,6 +2,9 @@ namespace utils {
   export function logger(key: string, data: any) {
     console.log(key, JSON.stringify(data, null, "\t"));
   }
+  export function error(message: string) {
+    Browser.msgBox(`ERROR: ${message}`);
+  }
 
   export function writeWORK(key: string, value: any) {
     const valueString = JSON.stringify(value, null, "\t");

@@ -73,6 +73,15 @@ query ($projectId: ID!, $after: String) {
                   }
                 }
               }
+              ... on ProjectV2ItemFieldNumberValue {
+                value: number
+                field {
+                  ... on ProjectV2FieldCommon {
+                    id
+                    field: name
+                  }
+                }
+              }
               ... on ProjectV2ItemFieldDateValue {
                 value: date
                 field {
