@@ -36,6 +36,7 @@ function refreshData() {
 }
 
 function handleUpdateSheet(e: GoogleAppsScript.Events.SheetsOnEdit) {
+  // const targetRange = spread.getSheetByName(consts.INPUT["mainSheetName"])?.getRange(1,1,1,1);
   const targetRange = e.range;
   const targetSheet = targetRange.getSheet();
   utils.logger("handleUpdateSheet", {
@@ -64,22 +65,29 @@ function handleUpdateSheet(e: GoogleAppsScript.Events.SheetsOnEdit) {
         );
         continue;
       }
+      const itemIdRange = targetSheet.getRange(targetRow, 1);
+      const itemId = itemIdRange.getDisplayValue();
+      const value = targetSheet
+        .getRange(targetRow, targetColumn)
+        .getDisplayValue();
       utils.logger(
         "handleUpdateSheet",
-        `emit: ${targetSheet.getName()}!${targetRow}:${targetColumn} => ${targetSheet
-          .getRange(targetRow, targetColumn)
-          .getDisplayValue()}`
+        `emit: ${targetSheet.getName()}!${targetRow}:${targetColumn} => ${value}`
       );
-      updateProjectV2Item.doExecute(
-        converter.callUpdate({
-          projectId: consts.getWORK().projectId,
-          itemId: targetSheet.getRange(targetRow, 1).getDisplayValue(),
-          targetColumn,
-          value: targetSheet
-            .getRange(targetRow, targetColumn)
-            .getDisplayValue(),
-        })
-      );
+      if (itemId) {
+        updateProjectV2Item.doExecute(
+          converter.callUpdate({
+            projectId: consts.getWORK().projectId,
+            itemId,
+            targetColumn,
+            value,
+          })
+        );
+      } else {
+        if (value) {
+          // addProjectV2Item
+        }
+      }
     }
   }
 }
