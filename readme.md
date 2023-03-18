@@ -1,1 +1,20 @@
-see https://www.oit.ac.jp/rd/labs/kobayashi-lab/~yagshi/gasts.html to know how to use GAS + TypeScript
+# GitHubProjects-SpreadSheet
+
+## Triger
+
+### handleUpdateSheet
+
+Trigered by GoogleAppsScript.Events.SheetsOnEdit
+
+### refreshData
+
+Trigered by GoogleAppsScript.Events.SheetsOnOpen
+
+## Script property
+
+- githubToken
+
+## Reference
+
+- [GitHub GraphQL API](https://docs.github.com/en/graphql/reference)
+- [clasp](https://github.com/google/clasp)
