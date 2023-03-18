@@ -1,0 +1,18 @@
+{
+  "name": "githubprojects-spreadsheet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bundle": "cat dist/*.js > bundle.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/google-apps-script": "^1.0.58",
+    "@types/node": "^18.15.3",
+    "graphql-request": "^5.2.0",
+    "typescript": "^4.9.5"
+  }
+}
