@@ -61,7 +61,7 @@ query ($projectId: ID!, $after: String) {
       items(first: 100, after: $after) {
         nodes {
           id
-          fieldValues(first: ${consts.fieldIdList.length}) {
+          fieldValues(first: 100) {
             nodes {
               __typename
               ... on ProjectV2ItemFieldTextValue {
