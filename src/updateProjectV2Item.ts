@@ -8,7 +8,11 @@ namespace updateProjectV2Item {
   }) => {
     // on developing
     const field = consts.getWORK().fields.find((field) => field.id === fieldId);
-    const fieldType = field?.dataType;
+    if (!field) {
+      utils.error("cannot get field");
+      return undefined;
+    }
+    const fieldType = field.dataType;
     if (fieldType === "NUMBER") {
       return { number: parseInt(value) };
     }
@@ -18,10 +22,11 @@ namespace updateProjectV2Item {
       };
     }
     if (fieldType === "ITERATION") {
+      const { configuration } = field;
       return {
-        iterationId: field?.configuration?.iterations.find(
-          (i) => i.title === value
-        )?.id,
+        iterationId: configuration?.iterations
+          .concat(configuration.completedIterations)
+          .find((i) => i.title === value)?.id,
       };
     }
     utils.error("No fieldType: " + fieldType);
@@ -39,6 +44,12 @@ namespace updateProjectV2Item {
     fieldId: string;
     value: string;
   }) {
+    utils.logger("updateProjectV2Item.Request", {
+      projectId,
+      itemId,
+      fieldId,
+      value,
+    });
     const query = value
       ? `
     mutation (
@@ -80,14 +91,16 @@ namespace updateProjectV2Item {
         }
       }
     `;
+    const projectV2FieldValue = convertToProjectV2FieldValue({
+      fieldId,
+      value,
+    });
+    if (projectV2FieldValue === undefined) return;
     const variables = {
       projectId,
       itemId,
       fieldId,
-      value: convertToProjectV2FieldValue({
-        fieldId,
-        value,
-      }),
+      value: projectV2FieldValue,
     };
     type ResType = {
       updateProjectV2ItemFieldValue: {

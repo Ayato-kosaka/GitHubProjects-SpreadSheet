@@ -23,6 +23,12 @@ namespace types {
       name: string;
     }[];
     configuration?: {
+      completedIterations: {
+        id: string;
+        title: string;
+        // 'YYY-MM-DD'
+        startDate: string;
+      }[];
       iterations: {
         id: string;
         title: string;

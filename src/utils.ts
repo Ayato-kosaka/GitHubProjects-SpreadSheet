@@ -3,7 +3,9 @@ namespace utils {
     console.log(key, JSON.stringify(data, null, "\t"));
   }
   export function error(message: string) {
-    Browser.msgBox(`ERROR: ${message}`);
+    consts.INPUT["showErrorMsgBox"] === "TRUE"
+      ? Browser.msgBox(`ERROR: ${message}`)
+      : console.log(`ERROR: ${message}`);
   }
 
   export function writeWORK(key: string, value: any) {

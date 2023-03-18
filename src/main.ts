@@ -35,33 +35,51 @@ function refreshData() {
     .setBorder(true, true, true, true, true, true);
 }
 
-function handleUpdateSheet() {
-  const targetSheet = spread.getActiveSheet(); //シートを取得
-  const targetCell: GoogleAppsScript.Spreadsheet.Range = spread.getActiveCell(); //アクティブセルを取得
-  const targetColumn: number = targetCell.getColumn(); // 何列目
-  const targetRow: number = targetCell.getRow(); // 何行目
-  if (
-    !(
-      targetSheet.getRange(1, 1).getDisplayValue() !== "" && // クリアされていないことを確認する
-      targetSheet.getName() === consts.INPUT["mainSheetName"] &&
-      targetRow > 1 &&
-      targetColumn > 1 &&
-      targetColumn <= consts.fieldIdList.length + 1
-    )
-  ) {
-    utils.logger(
-      "handleUpdateSheet",
-      `no emit: ${targetSheet.getName()}!${targetColumn}${targetRow}`
-    );
-    return;
+function handleUpdateSheet(e: GoogleAppsScript.Events.SheetsOnEdit) {
+  const targetRange = e.range;
+  const targetSheet = targetRange.getSheet();
+  utils.logger("handleUpdateSheet", {
+    "targetSheet.getName()": targetSheet.getName(),
+    getRow: targetRange.getRow(),
+    getColumn: targetRange.getColumn(),
+    getNumRows: targetRange.getNumRows(),
+    getNumColumns: targetRange.getNumColumns(),
+  });
+  for (let i = 0; i < targetRange.getNumRows(); i++) {
+    for (let j = 0; j < targetRange.getNumColumns(); j++) {
+      const targetRow: number = targetRange.getRow() + i; // 何行目
+      const targetColumn: number = targetRange.getColumn() + j; // 何列目
+      if (
+        !(
+          targetSheet.getRange(1, 1).getDisplayValue() !== "" && // クリアされていないことを確認する
+          targetSheet.getName() === consts.INPUT["mainSheetName"] &&
+          targetRow > 1 &&
+          targetColumn > 1 &&
+          targetColumn <= consts.fieldIdList.length + 1
+        )
+      ) {
+        utils.logger(
+          "handleUpdateSheet",
+          `no emit: ${targetSheet.getName()}!${targetRow}:${targetColumn}`
+        );
+        continue;
+      }
+      utils.logger(
+        "handleUpdateSheet",
+        `emit: ${targetSheet.getName()}!${targetRow}:${targetColumn} => ${targetSheet
+          .getRange(targetRow, targetColumn)
+          .getDisplayValue()}`
+      );
+      updateProjectV2Item.doExecute(
+        converter.callUpdate({
+          projectId: consts.getWORK().projectId,
+          itemId: targetSheet.getRange(targetRow, 1).getDisplayValue(),
+          targetColumn,
+          value: targetSheet
+            .getRange(targetRow, targetColumn)
+            .getDisplayValue(),
+        })
+      );
+    }
   }
-
-  updateProjectV2Item.doExecute(
-    converter.callUpdate({
-      projectId: consts.getWORK().projectId,
-      itemId: targetSheet.getRange(targetRow, 1).getDisplayValue(),
-      targetColumn,
-      value: targetCell.getDisplayValue(),
-    })
-  );
 }

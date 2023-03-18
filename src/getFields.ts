@@ -16,6 +16,11 @@ namespace getFields {
                 name
                 dataType
                 configuration {
+                  completedIterations {
+                    id
+                    title
+                    startDate
+                  }
                   iterations {
                     id
                     title
